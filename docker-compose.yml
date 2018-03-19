@@ -1,0 +1,35 @@
+version: '3'
+services:
+  nats:
+    hostname: nats
+    build: nats
+    working_dir: '/go/src/web'
+    command : nats-streaming-server -p 4222
+    volumes:
+      - ./nats:/go/src/web
+    ports:
+      - 4222:4222
+    tty: true
+  server_nats:
+    hostname: server_nats
+    build: server_nats
+    working_dir: '/go/src/app'
+    command: go run main.go
+    volumes:
+      - ./server_nats:/go/src/app
+    ports:
+      - 4223:4223
+    links:
+      - nats
+    tty: true
+  server_grpc:
+    hostname: server_grpc
+    build: server_grpc
+    working_dir: '/go/src/app'
+    command: sh ./start_cmd.sh
+    volumes:
+      - ./server_grpc:/go/src/app
+      - ./proto:/go/src/proto
+    ports:
+      - 5000:5000
+    tty: true

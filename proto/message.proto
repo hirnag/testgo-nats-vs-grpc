@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package proto;
+
+service Greeter {
+	rpc Reply (ReqMessage) returns (RepMessage){}
+}
+
+message ReqMessage{
+	string name = 1;
+}
+
+message RepMessage {
+	string message = 1;
+}
+
